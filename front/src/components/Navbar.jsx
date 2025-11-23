@@ -19,13 +19,17 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 /* React router dom */
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 /* Constants */
 import { navbarLinks } from "../constants/constants";
+/* Services */
+import { logout } from "../services/auth.js";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const value = e.target.value;
@@ -48,6 +52,11 @@ const Navbar = () => {
 
   const handleToggleDrawer = () => {
     setMobileOpen((prev) => !prev);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/auth");
   };
 
   return (
@@ -135,6 +144,7 @@ const Navbar = () => {
                 </li>
               ))}
               <li
+                onClick={handleLogout}
                 className="cursor-pointer flex justify-cetner gap-2 items-center font-secondary text-base text-white hover:text-gray-200 transition-colors duration-300"
               >
                 <LogoutIcon fontSize="small" />
@@ -257,7 +267,7 @@ const Navbar = () => {
 
           <Divider sx={{ borderColor: "rgba(255,255,255,0.2)", my: 1 }} />
 
-          <ListItemButton>
+          <ListItemButton onClick={handleLogout}>
             <ListItemIcon sx={{ color: "white", minWidth: 36 }}>
               <LogoutIcon fontSize="small" />
             </ListItemIcon>
