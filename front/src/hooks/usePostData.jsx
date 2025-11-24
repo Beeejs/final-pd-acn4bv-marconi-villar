@@ -2,11 +2,14 @@
 // src/hooks/usePostData.js
 import { useState, useCallback } from "react";
 import { auth } from "../config/firebase";
+import { useNavigate } from "react-router-dom";
 
 export const usePostData = () => {
   const [responseData, setResponseData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const action = useCallback(
     async (path, body = {}) => {
@@ -21,7 +24,7 @@ export const usePostData = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }),
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(body),
         });

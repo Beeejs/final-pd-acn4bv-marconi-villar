@@ -1,9 +1,9 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useContext } from "react";
 /* Hooks */
 import { useGetData } from "../hooks/useGetData";
 import { usePostData } from "../hooks/usePostData";
 /* React Router */
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 /* MUI */
 import {
   Button,
@@ -26,6 +26,8 @@ import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 /* Components */
 import Loader from "../components/Loader";
 import Swal from 'sweetalert2'
+/* Context */
+import { AuthContext } from "../context/AuthContext";
 
 const ProductABM = () => {
   const { action, responseData } = useGetData();
@@ -34,9 +36,23 @@ const ProductABM = () => {
   const [page, setPage] = useState(0);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
+  const { user, loading } = useContext(AuthContext);
   const { action: actionPostUpdate, responseData: responseDataPostUpdate } = usePostData();
 
+  // Mandamos a auth si no esta logueado no puede entrar a productAbm
+  useEffect(() => {
+    // Mientras Firebase resuelve, NO hacemos nada
+    if (loading) return;
+
+    // Si no hay usuario y no estamos ya en /auth, redirigimos
+    if (!user && location.pathname !== '/auth') {
+      navigate('/auth', { replace: true });
+    }
+  }, [user, loading, location.pathname, navigate]);
+
+  // Obtenemos los products
   useEffect(() => {
     action("/products/getAll");
   }, []);

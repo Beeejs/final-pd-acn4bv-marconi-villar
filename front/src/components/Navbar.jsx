@@ -18,6 +18,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from '@mui/icons-material/Login';
 /* React router dom */
 import { Link, useNavigate } from "react-router-dom";
 /* Constants */
@@ -26,8 +27,11 @@ import { navbarLinks } from "../constants/constants";
 import { FilterData } from "../context/FilterContext";
 /* Services */
 import { logout } from "../services/auth.js";
+/* Context */
+import { AuthContext } from "../context/AuthContext.jsx";
 
 const Navbar = () => {
+  const { user } = useContext(AuthContext);
   const { handleSetFilters } = useContext(FilterData);
   const navigate = useNavigate();
 
@@ -82,12 +86,16 @@ const Navbar = () => {
         {/* DESKTOP NAVBAR */}
         <div className="hidden lg:flex justify-between items-center w-full">
           <div className="flex justify-center items-center gap-8">
-            <Link
-              to="/productAbm"
-              className="cursor-pointer flex justify-cetner gap-2 items-center font-primary text-base text-white hover:text-gray-200 transition-colors duration-300"
-            >
-              ABM Productos
-            </Link>
+            {
+              user && (
+                <Link
+                  to="/productAbm"
+                  className="cursor-pointer flex justify-cetner gap-2 items-center font-primary text-base text-white hover:text-gray-200 transition-colors duration-300"
+                >
+                  ABM Productos
+                </Link>
+              ) 
+            }
             <div className="flex justify-center items-center gap-4">
                 {/* Input de búsqueda */}
                 <TextField
@@ -149,6 +157,19 @@ const Navbar = () => {
                   </Link>
                 </li>
               ))}
+              {
+                !user && (
+                  <li>
+                    <Link
+                      to="/auth"
+                      className="cursor-pointer flex justify-cetner gap-2 items-center font-secondary text-base text-white hover:text-gray-200 transition-colors duration-300"
+                    >
+                      <LoginIcon fontSize="small" />
+                      Iniciar Sesión
+                    </Link>
+                  </li>
+                )
+              }
               <li
                 onClick={handleLogout}
                 className="cursor-pointer flex justify-cetner gap-2 items-center font-secondary text-base text-white hover:text-gray-200 transition-colors duration-300"
@@ -239,18 +260,22 @@ const Navbar = () => {
 
         {/* Links */}
         <List>
-          <ListItemButton
-            component={Link}
-            to="/productAbm"
-            onClick={handleToggleDrawer}
-          >
-            <ListItemText
-              primary="ABM Productos"
-              primaryTypographyProps={{
-                fontFamily: "SlugsRacer, sans-serif",
-              }}
-            />
-          </ListItemButton>
+          {
+            user && (
+              <ListItemButton
+                component={Link}
+                to="/productAbm"
+                onClick={handleToggleDrawer}
+              >
+                <ListItemText
+                  primary="ABM Productos"
+                  primaryTypographyProps={{
+                    fontFamily: "SlugsRacer, sans-serif",
+                  }}
+                />
+              </ListItemButton>
+            )
+          }
 
           {navbarLinks.map((link) => (
             <ListItemButton
@@ -272,6 +297,26 @@ const Navbar = () => {
           ))}
 
           <Divider sx={{ borderColor: "rgba(255,255,255,0.2)", my: 1 }} />
+
+          {
+            !user && (
+              <ListItemButton
+                component={Link}
+                to="/auth"
+                onClick={handleToggleDrawer}
+              >
+                <ListItemIcon sx={{ color: "white", minWidth: 36 }}>
+                  <LoginIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Iniciar Sesión"
+                  primaryTypographyProps={{
+                    fontFamily: "Poppins, sans-serif",
+                  }}
+                />
+              </ListItemButton>
+            )
+          }
 
           <ListItemButton onClick={handleLogout}>
             <ListItemIcon sx={{ color: "white", minWidth: 36 }}>

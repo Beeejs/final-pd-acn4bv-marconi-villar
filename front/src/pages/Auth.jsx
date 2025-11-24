@@ -5,6 +5,7 @@ import { loginWithEmail, loginWithGoogle, registerWithEmail, logout } from "../s
 /* Components */
 import { TextField, FormControl, InputLabel, OutlinedInput, Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import Swal from 'sweetalert2'
 /* Utils */
 import { errorHanlerFirebase } from "../utils/helper.js";
@@ -126,7 +127,25 @@ const Auth = () => {
   };
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] w-full flex items-center justify-center px-4">
+    <section className="min-h-[calc(100vh-4rem)] w-full flex flex-col items-center justify-center px-4">
+      <div className="w-full max-w-md mb-3 flex justify-start">
+        <Button
+          size="small"
+          startIcon={<ArrowBackIosNewIcon fontSize="small" />}
+          onClick={() => navigate('/')}
+          classes={{
+            root: `
+              !border-none
+              !text-game-flame-medio
+              hover:!bg-game-flame-claro/20
+              !font-secondary
+              !text-xs
+            `
+          }}
+        >
+          Volver a Home
+        </Button>
+      </div>
       <div className="w-full max-w-md bg-secondary/95 border-2 border-game-flame-oscuro shadow-xl rounded-xl p-8 flex flex-col gap-6">
         
         {/* HEADER */}

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 /* Hooks */
 import { useGetData } from "../../hooks/useGetData";
 import { usePostData } from "../../hooks/usePostData";
@@ -23,14 +23,19 @@ import {
 } from "../../constants/constants";
 /* Componentes */
 import Swal from 'sweetalert2'
+/* Context */
+import { AuthContext } from "../../context/AuthContext";
 
 const ProductForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
- const { action, responseData, loading } = useGetData();
+ const { action, responseData, loading: loadingGetAll } = useGetData();
  const { action: actionPostCreate, responseData: responseDataPostCreate, loading: loadingPostCreate } = usePostData();
  const { action: actionPostUpdate, responseData: responseDataPostUpdate, loading: loadingPostUpdate } = usePostData();
+
+const { user, loading } = useContext(AuthContext);
 
  const isNew = !id;
  const [readOnly, setReadOnly] = useState(!isNew); // si hay id arranca solo lectura
@@ -57,6 +62,18 @@ const ProductForm = () => {
   });
 
   // useEffects
+
+  // Mandamos a auth si no esta logueado no puede entrar a productAbm
+  useEffect(() => {
+    // Mientras Firebase resuelve, NO hacemos nada
+    if (loading) return;
+
+    // Si no hay usuario y no estamos ya en /auth, redirigimos
+    if (!user && location.pathname !== '/auth') {
+      navigate('/auth', { replace: true });
+    }
+  }, [user, loading, location.pathname, navigate]);
+
   // Pegamos a la api si hay id para buscar el producto
   useEffect(() => {
     if (!id) return;
@@ -186,7 +203,7 @@ const ProductForm = () => {
           </Box>
 
           <TextField
-            label={loading ? "Cargando..." : "Título"}
+            label={loadingGetAll ? "Cargando..." : "Título"}
             fullWidth
             size="small"
             value={formData.title}
@@ -195,7 +212,7 @@ const ProductForm = () => {
           />
 
           <TextField
-            label={loading ? "Cargando..." : "Descripción"}
+            label={loadingGetAll ? "Cargando..." : "Descripción"}
             fullWidth
             multiline
             rows={3}
@@ -217,7 +234,7 @@ const ProductForm = () => {
 
           <Box className="flex flex-col md:flex-row gap-4">
             <TextField
-              label={loading ? "Cargando..." : "Precio"}
+              label={loadingGetAll ? "Cargando..." : "Precio"}
               type="number"
               fullWidth
               size="small"
@@ -227,7 +244,7 @@ const ProductForm = () => {
             />
 
             <FormControl fullWidth size="small" disabled={readOnly}>
-              <InputLabel>{loading ? "Cargando..." : "Plataforma"}</InputLabel>
+              <InputLabel>{loadingGetAll ? "Cargando..." : "Plataforma"}</InputLabel>
               <Select
                 value={formData.platform}
                 onChange={handleChange("platform")}
@@ -246,7 +263,7 @@ const ProductForm = () => {
           {/* Categoría + Género */}
           <Box className="flex flex-col md:flex-row gap-4">
             <FormControl fullWidth size="small" disabled={readOnly}>
-              <InputLabel>{loading ? "Cargando..." : "Categoría"}</InputLabel>
+              <InputLabel>{loadingGetAll ? "Cargando..." : "Categoría"}</InputLabel>
               <Select
                 value={formData.category}
                 onChange={handleChange("category")}
@@ -262,7 +279,7 @@ const ProductForm = () => {
             </FormControl>
 
             <FormControl fullWidth size="small" disabled={readOnly}>
-              <InputLabel>{loading ? "Cargando..." : "Género"}</InputLabel>
+              <InputLabel>{loadingGetAll ? "Cargando..." : "Género"}</InputLabel>
               <Select
                 value={formData.genre}
                 onChange={handleChange("genre")}
@@ -280,7 +297,7 @@ const ProductForm = () => {
 
           {/* Imagen */}
           <TextField
-            label={loading ? "Cargando..." : "Imagen URL"}
+            label={loadingGetAll ? "Cargando..." : "Imagen URL"}
             fullWidth
             size="small"
             value={formData.img}
@@ -311,7 +328,7 @@ const ProductForm = () => {
               <Button
                 type="button"
                 variant="contained"
-                disabled={loading}
+                disabled={loadingGetAll}
                 onClick={handleEnableEdit}
               >
                 Modificar

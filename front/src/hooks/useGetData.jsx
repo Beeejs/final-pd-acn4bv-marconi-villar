@@ -24,7 +24,7 @@ export const useGetData = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }),
+            Authorization: `Bearer ${token}`,
           },
         });
 

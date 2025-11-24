@@ -14,7 +14,7 @@ export const navbarLinks = [
   {
     id: 2,
     title: 'Contacto',
-    url: '/contacto',
+    url: '/contact',
     icon: EmailIcon
   },
   {

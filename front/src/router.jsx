@@ -8,6 +8,7 @@ import AuthPage from "./pages/Auth";
 import ProductABM from "./pages/ProductABM";
 import ErrorPage from "./pages/Error";
 import ProductForm from "./components/products/ProductForm";
+import ContactPage from "./pages/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: "/products/:id",
         element: <ProductForm />,
+      },
+      {
+        path: '/contact',
+        element: <ContactPage/>
       }
     ]
   },
