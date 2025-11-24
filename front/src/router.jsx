@@ -5,6 +5,7 @@ import Layout from "./Layout";
 import Home from "./pages/Home";
 import AuthPage from "./pages/Auth";
 import ErrorPage from "./pages/Error";
+import Products from "./pages/Products";
 
 export const router = createBrowserRouter([
   {
@@ -17,7 +18,11 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home/>
-      }
+      },
+      {
+        path: "/products",
+        element: <Products/>
+      },
     ]
   },
   {

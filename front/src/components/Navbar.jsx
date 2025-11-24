@@ -1,5 +1,5 @@
 /* Hooks */
-import { useState } from "react";
+import { useContext, useState } from "react";
 /* Components */
 import Swal from "sweetalert2";
 /* MUI */
@@ -22,17 +22,21 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
 /* Constants */
 import { navbarLinks } from "../constants/constants";
+/* Context */
+import { FilterData } from "../context/FilterContext";
 /* Services */
 import { logout } from "../services/auth.js";
 
 const Navbar = () => {
+  const { handleSetFilters } = useContext(FilterData);
+  const navigate = useNavigate();
+
   const [search, setSearch] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const navigate = useNavigate();
-
   const handleOnChange = (e) => {
     const value = e.target.value;
+    if (value === "") handleSetFilters({ search: "" });
     setSearch(value);
   };
 
@@ -47,6 +51,8 @@ const Navbar = () => {
       return;
     }
 
+    navigate("/products");
+    handleSetFilters({ search });
     setMobileOpen(false); // cerrar drawer si viene de mobile
   };
 
