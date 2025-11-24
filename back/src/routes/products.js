@@ -7,8 +7,8 @@ import { verifyToken } from "../middlewares/auth.js";
 
 const productRouter = express.Router();
 
-productRouter.get("/getAll", verifyToken, getProducts);
-productRouter.get("/getOne/:id", verifyToken, getProduct);
+productRouter.get("/getAll", getProducts); // Rutas publicas
+productRouter.get("/getOne/:id", getProduct); // Rutas publicas
 productRouter.post("/create", verifyToken, createProduct);
 productRouter.post("/update/:id", verifyToken, updateProduct);
 
