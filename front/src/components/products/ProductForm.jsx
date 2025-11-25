@@ -109,7 +109,7 @@ const { user, loading } = useContext(AuthContext);
       })
 
       // Redireccionamos a la vista del producto actualizado (actualizar todo)
-      navigate(`/products/${responseDataPostUpdate.data?.docId}`);
+      navigate('/productAbm');
     }
 
   }, [responseDataPostCreate, responseDataPostUpdate])
@@ -136,10 +136,27 @@ const { user, loading } = useContext(AuthContext);
     e.preventDefault();
     if (readOnly) return;
 
+    
     // Si es una consola eliminamos el genre y el platform
     if(formData.category === 'consoles'){
       delete formData.genre
       delete formData.platform
+    }
+    // Validaciones
+    const isConsole = formData.category === 'consoles';
+
+    const requiredFields = !formData.title || !formData.description || !formData.price || !formData.category;
+
+    const gameFieldsRequired = !isConsole && (!formData.platform || !formData.genre);
+
+    if (requiredFields || gameFieldsRequired) {
+      Swal.fire({
+        icon: "warning",
+        title: "Campos obligatorios",
+        text: "Todos los campos son obligatorios. (Recuerda que para juegos, 'Plataforma' y 'Género' son necesarios).",
+        confirmButtonText: "Aceptar",
+      });
+      return;
     }
 
     if (isNew) {

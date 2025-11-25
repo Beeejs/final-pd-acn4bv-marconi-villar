@@ -1,7 +1,7 @@
 // api/controllers/products.js
 
 // Importa la instancia de Firestore desde tu archivo de configuración
-import { db } from '../database/firebase.js';
+import { db, admin } from '../database/firebase.js';
 
 const NAME_COLLECTION = 'productos';
 
