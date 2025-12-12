@@ -7,6 +7,7 @@ import cors from 'cors';
 /* Rutas */
 import productRouter from './routes/products.js';
 import userRouter from './routes/users.js';
+import cartRouter from './routes/cart.js';
 
 // Configuracion
 const PORT = process.env.PORT || 3000;
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
+app.use('/api/cart', cartRouter);
 
 // Listen
 app.listen(PORT, () => {
