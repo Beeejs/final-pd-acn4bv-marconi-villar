@@ -93,13 +93,21 @@ const Navbar = () => {
         <div className="hidden lg:flex justify-between items-center w-full">
           <div className="flex justify-center items-center gap-8">
             {
-              user && (
-                <Link
-                  to="/productAbm"
-                  className="cursor-pointer flex justify-cetner gap-2 items-center font-primary text-base text-white hover:text-gray-200 transition-colors duration-300"
-                >
-                  ABM Productos
-                </Link>
+              user && user?.reloadUserInfo?.customAttributes && JSON.parse(user?.reloadUserInfo?.customAttributes).rol === "admin" && (
+                <>
+                  <Link
+                    to="/productAbm"
+                    className="cursor-pointer flex justify-cetner gap-2 items-center font-primary text-base text-white hover:text-gray-200 transition-colors duration-300"
+                  >
+                    ABM Productos
+                  </Link>
+                  <Link
+                    to="/users"
+                    className="cursor-pointer flex justify-cetner gap-2 items-center font-primary text-base text-white hover:text-gray-200 transition-colors duration-300"
+                  >
+                    Usuarios
+                  </Link>
+                </>
               ) 
             }
             <div className="flex justify-center items-center gap-4">
@@ -283,19 +291,33 @@ const Navbar = () => {
         {/* Links */}
         <List>
           {
-            user && (
-              <ListItemButton
-                component={Link}
-                to="/productAbm"
-                onClick={handleToggleDrawer}
-              >
-                <ListItemText
-                  primary="ABM Productos"
-                  primaryTypographyProps={{
-                    fontFamily: "SlugsRacer, sans-serif",
-                  }}
-                />
-              </ListItemButton>
+            user && user?.reloadUserInfo?.customAttributes && JSON.parse(user.reloadUserInfo?.customAttributes).rol  === "admin" && (
+              <>
+                <ListItemButton
+                  component={Link}
+                  to="/productAbm"
+                  onClick={handleToggleDrawer}
+                >
+                  <ListItemText
+                    primary="ABM Productos"
+                    primaryTypographyProps={{
+                      fontFamily: "SlugsRacer, sans-serif",
+                    }}
+                  />
+                </ListItemButton>
+                <ListItemButton
+                  component={Link}
+                  to="/users"
+                  onClick={handleToggleDrawer}
+                >
+                  <ListItemText
+                    primary="Usuarios"
+                    primaryTypographyProps={{
+                      fontFamily: "SlugsRacer, sans-serif",
+                    }}
+                  />
+                </ListItemButton>
+              </>
             )
           }
 

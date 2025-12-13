@@ -31,14 +31,14 @@ const ProductForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
- const { action, responseData, loading: loadingGetAll } = useGetData();
- const { action: actionPostCreate, responseData: responseDataPostCreate, loading: loadingPostCreate } = usePostData();
- const { action: actionPostUpdate, responseData: responseDataPostUpdate, loading: loadingPostUpdate } = usePostData();
+  const { action, responseData, loading: loadingGetAll } = useGetData();
+  const { action: actionPostCreate, responseData: responseDataPostCreate, loading: loadingPostCreate } = usePostData();
+  const { action: actionPostUpdate, responseData: responseDataPostUpdate, loading: loadingPostUpdate } = usePostData();
 
-const { user, loading } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
- const isNew = !id;
- const [readOnly, setReadOnly] = useState(!isNew); // si hay id arranca solo lectura
+  const isNew = !id;
+  const [readOnly, setReadOnly] = useState(!isNew); // si hay id arranca solo lectura
 
   // Titulos
   const title = isNew ? "Nuevo producto" : "Producto";
@@ -72,6 +72,11 @@ const { user, loading } = useContext(AuthContext);
     if (!user && location.pathname !== '/auth') {
       navigate('/auth', { replace: true });
     }
+
+    if(user?.reloadUserInfo?.customAttributes && JSON.parse(user.reloadUserInfo?.customAttributes).rol !== "admin"){
+      navigate("/", { replace: true });
+    }
+
   }, [user, loading, location.pathname, navigate]);
 
   // Pegamos a la api si hay id para buscar el producto
@@ -161,10 +166,8 @@ const { user, loading } = useContext(AuthContext);
 
     if (isNew) {
       actionPostCreate("/products/create", formData)
-      console.log("POST nuevo producto:", formData);
     } else {
       actionPostUpdate(`/products/update/${id}`, formData)
-      console.log("EDIT producto:", id, formData);
     }
   };
 
@@ -173,7 +176,7 @@ const { user, loading } = useContext(AuthContext);
   };
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] w-full flex items-center justify-center px-4 py-8">
+    <section className="flex items-center justify-center h-full w-full px-4 py-8">
       <div className="w-full max-w-3xl bg-secondary/95 border-2 border-game-flame-oscuro shadow-xl rounded-xl p-8 flex flex-col gap-6">
         
         {/* HEADER */}

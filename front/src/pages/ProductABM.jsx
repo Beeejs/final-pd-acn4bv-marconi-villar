@@ -50,12 +50,19 @@ const ProductABM = () => {
     if (!user && location.pathname !== '/auth') {
       navigate('/auth', { replace: true });
     }
+
+    if(user?.reloadUserInfo?.customAttributes && JSON.parse(user.reloadUserInfo?.customAttributes).rol !== "admin"){
+      navigate("/", { replace: true });
+    }
+
   }, [user, loading, location.pathname, navigate]);
 
   // Obtenemos los products
   useEffect(() => {
+    if(!user && (user?.reloadUserInfo?.customAttributes && JSON.parse(user.reloadUserInfo?.customAttributes).rol !== "admin")) return;
+
     action("/products/getAll");
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if(responseDataPostUpdate && responseDataPostUpdate.status === true){

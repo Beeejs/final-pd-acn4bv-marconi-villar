@@ -10,6 +10,7 @@ import ErrorPage from "./pages/Error";
 import ProductForm from "./components/products/ProductForm";
 import ContactPage from "./pages/Contact";
 import ProductDetail from "./pages/ProductDetail";
+import Users from "./pages/Users";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
       {
         path: "/productDetail/:id",
         element: <ProductDetail />,
+      },
+      {
+        path: '/users',
+        element: <Users/>
       },
       {
         path: '/contact',
