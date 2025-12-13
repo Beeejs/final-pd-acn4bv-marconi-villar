@@ -25,3 +25,9 @@ export const verifyToken = async (req, res, next) => {
   }
 };
 
+export const verifyAdmin = (req, res, next) => {
+  if (req.user.rol !== "admin") {
+    return res.status(403).json({ status: false, message: "Permiso denegado" });
+  }
+  next();
+};
